@@ -74,3 +74,4 @@ El comando va a construir un contenedor y desplegar nuestra app ademas de genera
 
 [localhost](http://localhost:3000) y ver nuestra app en funcionamiento
 
+<img src="/img Marco/app.png" alt="gitclone command" width="500"/>
