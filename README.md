@@ -77,6 +77,7 @@ El comando va a construir un contenedor y desplegar nuestra app ademas de genera
 <img src="/img Marco/app.png" alt="gitclone command" width="500"/>
 
 <br>
+
 ## Paso 4 (Share the application)
 
 Ahora que hemos creado una imagen, podemos compartirla. Para compartir imágenes de Docker, debemos utilizar un registro de Docker. El registro predeterminado es **DockerHub** y es de donde provienen todas las imágenes que se han  utilizado.
