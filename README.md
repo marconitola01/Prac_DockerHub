@@ -1,6 +1,6 @@
-# Practica DockerHub
+# PRACTICA DOCKERHUB
 
-## Paso 2 (Containerize an application)
+## PASO 2 (CONTAINERIZE AN APPLICATION)
 
 Debemos clonar el repositorio de la aplicacion usando el siguiente comando.
 
@@ -78,7 +78,7 @@ El comando va a construir un contenedor y desplegar nuestra app ademas de genera
 
 <br>
 
-## Paso 4 (Share the application)
+## PASO 4 (SHARE THE APPLICATION)
 
 Ahora que hemos creado una imagen, podemos compartirla. Para compartir imágenes de Docker, debemos utilizar un registro de Docker. El registro predeterminado es **DockerHub** y es de donde provienen todas las imágenes que se han  utilizado.
 
@@ -121,7 +121,7 @@ el comando se encargara de empujar la imagen al nuevo repositorio de **DockerHub
 
 <img src="/img Marco/dockerhub.png" alt="gitclone command" width="600"/>
 
-## paso 6 (use bind mounts)    
+## PASO 6 (USE BIND MOUNTS)   
 
 Diferencias entre montajes de volumen y montajes de enlace.
 
@@ -200,7 +200,11 @@ Using sqlite database at /etc/todos/todo.db
 Listening on port 3000
 ```
 
+## PASO 8 (USE DOCKER COMPOSE)
 
+>La gran ventaja de usar Compose es que puede definir la pila de su aplicación en un archivo, mantenerla en la raíz del repositorio de su proyecto (ahora tiene control de versión) y permitir fácilmente que otra persona contribuya a su proyecto. Alguien sólo necesitaría clonar su repositorio e iniciar la aplicación usando Compose. De hecho, es posible que veas bastantes proyectos en GitHub/GitLab haciendo exactamente esto ahora.
+
+1. En el directorio getting-started-app vamos a crear un archivo  llamdo **compose.yaml**.
 
 
 
