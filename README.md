@@ -70,4 +70,6 @@ docker run -dp 127.0.0.1:3000:3000 getting-started
 
 <img src="/img Marco/runDocker.png" alt="gitclone command" width="500"/>
 <br>
-El comando va a construir un contenedor y desplegar nuestra app ademas de generar un SHA 256 indentificador, ahora podemos abrir dentro de un navegador de nuestra eleccion la ruta correspondiente al [localhost](http://localhost:3000)
+El comando va a construir un contenedor y desplegar nuestra app ademas de generar un SHA 256 indentificador, ahora podemos abrir dentro de un navegador de nuestra eleccion la ruta correspondiente al 
+
+[localhost](http://localhost:3000)
