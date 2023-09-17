@@ -40,7 +40,7 @@ dentro de la ruta correcta vamos a crear un nuevo archivo vacio llamado Dockerfi
 C:\Users\MARCO\OneDrive\Escritorio\getting-started-app>type nul > Dockerfile
 ```
 
-Ahora usando un editor de codigo vamos a editar el nuevo archivo Dockerfile asi como se muestra en la siguiente imagen.
+Ahora usando un editor de codigo vamos a editar el nuevo archivo **Dockerfile** asi como se muestra en la siguiente imagen.
 
 <img src="/img Marco/Dockerfile.png" alt="gitclone command" width="500"/>
 <br>
@@ -62,7 +62,7 @@ Luego de correr el comando anterior se contruira la imagen de docker en base al 
 
 ### iniciar un contenedor de aplicaciones
 
-Ya tenemos una imagen con todo lo necesario para correr una app, vamos a correr dicha imagen con el comando docker run especificando el nombre de la imagen.
+Ya tenemos una imagen con todo lo necesario para correr una app, vamos a correr dicha imagen con el comando **docker run** especificando el nombre de la imagen.
 
 ```
 docker run -dp 127.0.0.1:3000:3000 getting-started
@@ -70,8 +70,53 @@ docker run -dp 127.0.0.1:3000:3000 getting-started
 
 <img src="/img Marco/runDocker.png" alt="gitclone command" width="500"/>
 <br>
-El comando va a construir un contenedor y desplegar nuestra app ademas de generar un SHA 256 indentificador, ahora podemos abrir dentro de un navegador de nuestra eleccion la ruta correspondiente al 
+El comando va a construir un contenedor y desplegar nuestra app ademas de generar un SHA 256 indentificador, ahora podemos abrir dentro de un navegador de nuestra eleccion la ruta correspondiente al local host y ver nuestra app en funcionamiento
 
-[localhost](http://localhost:3000) y ver nuestra app en funcionamiento
+[localhost](http://localhost:3000) 
 
 <img src="/img Marco/app.png" alt="gitclone command" width="500"/>
+
+<br>
+## Paso 4 (Share the application)
+
+Ahora que hemos creado una imagen, podemos compartirla. Para compartir imágenes de Docker, debemos utilizar un registro de Docker. El registro predeterminado es **DockerHub** y es de donde provienen todas las imágenes que se han  utilizado.
+
+### Crear un repositorio
+
+1. inicie sesión en **DockerHub**
+
+2. Seleccione el botón Crear repositorio .
+
+3. Para el nombre del repositorio, utilice getting-started. Asegúrese de que la visibilidad sea pública .
+
+4. Seleccione **Crear**.
+
+### Push (empujar la imagen)
+
+1. Inicie sesion en **DockerHub** desde la linea de comandos
+
+```
+docker login -u YOUR-USER-NAME
+```
+
+<img src="/img Marco/loginDockerhub.png" alt="gitclone command" width="400"/>
+<br>
+
+2. Utilice el **docker tag** comando para darle a la getting-started imagen un nuevo nombre. Reemplácelo con su nombre de usuario y con su ID de Docker.
+
+```
+docker tag getting-started marcomn7/getting-started
+```
+
+3. Ahora ejecutemos el comando push
+
+```
+docker push marcomn7/getting-started
+```
+<img src="/img Marco/push.png" alt="gitclone command" width="500"/>
+<br>
+
+el comando se encargara de empujar la imagen al nuevo repositorio de **DockerHub**, podemos revisar la correcta ejecucion dentro del mismo **DockerHub**
+
+<img src="/img Marco/dockerhub.png" alt="gitclone command" width="600"/>
+
