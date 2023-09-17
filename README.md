@@ -72,4 +72,5 @@ docker run -dp 127.0.0.1:3000:3000 getting-started
 <br>
 El comando va a construir un contenedor y desplegar nuestra app ademas de generar un SHA 256 indentificador, ahora podemos abrir dentro de un navegador de nuestra eleccion la ruta correspondiente al 
 
-[localhost](http://localhost:3000)
+[localhost](http://localhost:3000) y ver nuestra app en funcionamiento
+
