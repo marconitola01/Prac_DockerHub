@@ -303,7 +303,7 @@ Y luego se verifica si la base de datos quedo en funcionamiento.
 
 como cada contenedor tiene su propia direccion ip, la manera de utilizar SQL  en este caso es con nicolaka/netshoot que contiene varias herramientas para solucionar y depurar problemas de res
 
-<img src="/Img Luis/Multi3.JPG " alt="gitclone command" width="1000"/>
+<img src="/Img Luis/multi3.JPG " alt="gitclone command" width="1000"/>
 
 
 
