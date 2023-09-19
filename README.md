@@ -444,7 +444,7 @@ volumes:
 
 - Ya realizados los pasos anteriores nuestro archivo compose.yaml deberia verse asi:
 
-<img src="/Img Marco/ComposeRel.png " alt="gitclone command" width="500"/>
+<img src="/Img Marco/ComposeRel.png " alt="gitclone command" width="400"/>
 <br>
 
 ### Ejecutar la pila de aplicaciones
