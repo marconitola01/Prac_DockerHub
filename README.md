@@ -145,7 +145,7 @@ docker login -u YOUR-USER-NAME
 <img src="/img Marco/loginDockerhub.png" alt="gitclone command" width="400"/>
 <br>
 
-2. Utilice el **docker tag** comando para darle a la getting-started imagen un nuevo nombre. Reemplácelo con su nombre de usuario y con su ID de Docker.
+1. Utilice el **docker tag** comando para darle a la imagen getting-started  un nuevo nombre. Reemplácelo con su nombre de usuario y con su ID de Docker.
 
 ```
 docker tag getting-started marcomn7/getting-started
@@ -224,7 +224,7 @@ docker run -it --mount "type=bind,src=$pwd,target=/src" ubuntu bash
 
 Luego de ejecutado el anterior comando en power shell (en CMD dio problemas), nos aparecera una bash de ubuntu.
 
-<img src="/img Marco/bashUbuntu.png" alt="gitclone command" width="500"/>
+<img src="/img Marco/bashUbuntu.png" alt="gitclone command" width="700"/>
 <br>
 3. Dentro de la bash de ubuntu cambiemos al directorio src, Este es el directorio que montó al iniciar el contenedor. Al enumerar el contenido de este directorio se muestran los mismos archivos que en el getting-started-app directorio de su máquina host.
 <br>
