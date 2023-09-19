@@ -230,7 +230,7 @@ Luego de ejecutado el anterior comando en power shell (en CMD dio problemas), no
 <br>
 <img src="/img Marco/archivosUbuntu.png" alt="gitclone command" width="500"/>
 <br>
-4. Creamos un nuevo archivo llamado **myfile.txt** y observemos si se encuentra o no dentro de el directorio.
+4. Creamos un nuevo archivo llamado myfile.txt y observemos si se encuentra o no dentro de el directorio.
 <img src="/img Marco/myfile.png" alt="gitclone command" width="500"/>
 <br>
 5. Volvamos a la terminal donde estuvimos antes del docker run y vemos que ahora tenemos acceso al mismo archivo dentro de getting-start-app.
@@ -312,8 +312,170 @@ como cada contenedor tiene su propia direccion ip, la manera de utilizar SQL  en
 
 >La gran ventaja de usar Compose es que puede definir la pila de su aplicación en un archivo, mantenerla en la raíz del repositorio de su proyecto (ahora tiene control de versión) y permitir fácilmente que otra persona contribuya a su proyecto. Alguien sólo necesitaría clonar su repositorio e iniciar la aplicación usando Compose. De hecho, es posible que veas bastantes proyectos en GitHub/GitLab haciendo exactamente esto ahora.
 
-1. En el directorio getting-started-app vamos a crear un archivo  llamdo **compose.yaml**.
+1. En el directorio getting-started-app vamos a crear un archivo  llamado **compose.yaml**.
 
+<img src="/Img Marco/compose.png " alt="gitclone command" width=""/>
+<br>
 
+### Definir el servicio de la aplicacion
 
+en la parte anterior usamos el siguiente comando para defirnir variables de entorno y el servicio de **mySQL** 
 
+```
+$ docker run -d \
+    --network todo-app --network-alias mysql \
+    -v todo-mysql-data:/var/lib/mysql \
+    -e MYSQL_ROOT_PASSWORD=secret \
+    -e MYSQL_DATABASE=todos \
+    mysql:8.0
+```
+
+Ahora vamos a definir este servicio dentro de nuestro nuevo archivo **compose.yaml** 
+
+- comenzamos definiendo el nombre y la imagen del primer servicio (o contenedor) que desea ejecutar como parte de su aplicación. El nombre se convertirá automáticamente en un alias de red, lo que será útil al definir su servicio **MySQL**.
+
+```
+services:
+  app:
+    image: node:18-alpine
+```
+- Por lo general, verá **command** cerca de la image definición, aunque no hay ningún requisito para realizar el pedido. Agregue el command a su archivo compose.
+
+```
+services:
+  app:
+    image: node:18-alpine
+    command: sh -c "yarn install && yarn run dev"
+```
+
+- Ahora migre la **-p 127.0.0.1:3000:3000** parte del comando definiendo el puerto para el servicio.
+
+```
+services:
+  app:
+    image: node:18-alpine
+    command: sh -c "yarn install && yarn run dev"
+    ports:
+      - 127.0.0.1:3000:3000
+```
+
+- A continuación, migre tanto el directorio de trabajo **( -w /app)** como la asignación de volumen **( -v "$(pwd):/app")** utilizando las definiciones **working_dir** y **.volumes**
+
+> Una ventaja de las definiciones de volúmenes de Docker Compose es que puede utilizar rutas relativas desde el directorio actual.
+
+```
+services:
+  app:
+    image: node:18-alpine
+    command: sh -c "yarn install && yarn run dev"
+    ports:
+      - 127.0.0.1:3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+```
+
+- Finalmente, necesita migrar las definiciones de variables de entorno usando la palabra clave **environment**.
+
+```
+services:
+  app:
+    image: node:18-alpine
+    command: sh -c "yarn install && yarn run dev"
+    ports:
+      - 127.0.0.1:3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos
+```
+
+### Definir el servicio de mySQL
+
+Dentro del mismo **compose.yaml** vamos a definir el servicio de **MYSQL**, para especificar las variables de entorno usadas por el servicio de bd en este caso **MYSQL**
+
+- definimos el nuevo servicio y asígnamos un nombre para que obtenga automáticamente el alias de red. También especificamos la imagen que se utilizará.
+
+```
+
+services:
+  app:
+    # Definicion de la APP
+  mysql:
+    image: mysql:8.0
+```
+
+- A continuación, defina la asignación de volumen. Cuando ejecutó el contenedor con docker run, Docker creó el volumen nombrado automáticamente. Sin embargo, eso no sucede cuando se ejecuta con Compose. Debe definir el volumen en la seccion **volumes:** y luego especificar el punto de montaje en la configuración del servicio. Simplemente proporcionando solo el nombre del volumen, se utilizan las opciones predeterminadas.
+
+```
+services:
+  app:
+    # The app service definition
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+
+volumes:
+  todo-mysql-data:
+```
+
+- Finalmente especificamos las variables de entorno
+
+```
+services:
+  app:
+    # The app service definition
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+
+volumes:
+  todo-mysql-data:
+```
+
+- Ya realizados los pasos anteriores nuestro archivo compose.yaml deberia verse asi:
+
+<img src="/Img Marco/ComposeRel.png " alt="gitclone command" width="500"/>
+<br>
+
+### Ejecutar la pila de aplicaciones
+
+> Ahora que tenemos nuestro **compose.yaml** podemos automatizar contenedores y ejecutar servicios
+
+1. Debemos asegurarnos de no tener en ejecucion copias de los contenedores usamos **docker ps** para enumerar los contenedores y docker **rm -f id** eliminarlos.
+
+<img src="/Img Marco/dockerps.png " alt="gitclone command" width="500"/>
+<br>
+
+2. Iniciamos la pila de aplicaciones usando el comando **docker compose** up. Agregue  **-d**  para ejecutar todo en segundo plano.
+(recordemos estar dentro de la ruta del proyecto).
+
+<img src="/Img Marco/compseUp.png " alt="gitclone command" width="700"/>
+<br>
+
+> Notaremos que Docker Compose creó el volumen y también una red. De forma predeterminada, Docker Compose crea automáticamente una red específica para la pila de aplicaciones (razón por la cual no definió una en el archivo Compose).
+
+**podemos ver los volumenes que se crearon desde _Docker desktop_**
+
+<img src="/Img Marco/volumenes.png " alt="gitclone command" width="700"/>
+<br>
+
+**podemos ver los registros de accion con el comando   _docker compose logs -f_**
+
+```
+mysql_1  | 2019-10-03T03:07:16.083639Z 0 [Note] mysqld: ready for connections.
+mysql_1  | Version: '8.0.31'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server (GPL)
+app_1    | Connected to mysql db at host mysql
+app_1    | Listening on port 3000
+```
+
+> Ahora podemos abrir el localhost de nuestra maquina y ver la app en funcionamiento, pudimos ver como Docker compose nos ayuda a simplificar la forma de definir y compartir aplicaciones _multiservicio_
