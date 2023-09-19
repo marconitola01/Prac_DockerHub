@@ -95,7 +95,7 @@ Y iniciamos el nuevo contenedor con el código actualizado, utilizando nuevament
 $ docker run -dp 127.0.0.1:3000:3000 getting-started
 ```
 Pero para evitar el siguiente error:
-<img src="/Img Luis//Update2.JPG " alt="gitclone command" width="1000"/>
+<img src="/Img Luis/Update2.JPG " alt="gitclone command" width="1000"/>
  es necesario remover el anterior contenedor que está corriendo también en el puerto 3000 y solo un proceso especifico puede ocupar un puerto.
 Para remover el contenedor que se encuentra corriendo se debe:
 1)	Obtener el Id de este con el comando:
@@ -115,9 +115,9 @@ $ docker rm <the-container-id>
 ```
 
 Ahora es possible iniciar el contendor modificado sin problema.
-<img src="/Img Luis//Update3.JPG " alt="gitclone command" width="1000"/>
+<img src="/Img Luis/Update3.JPG " alt="gitclone command" width="1000"/>
 Resultado: 
-<img src="/Img Luis//Update4.JPG " alt="gitclone command" width="1000"/>
+<img src="/Img Luis/Update4.JPG " alt="gitclone command" width="1000"/>
 
 
 ## PASO 4 (SHARE THE APPLICATION)
@@ -168,30 +168,35 @@ Cada contenedor cuenta con su propio espacio temporal por lo que aunque se utili
 La manera en la que se suguiere que se vea esto es con el siguiente comando: 
 ```
 $ docker run -d ubuntu bash -c "shuf -i 1-10000 -n 1 -o /data.txt && tail -f /dev/null"
-
 ```
+<img src="/Img Luis/DB1.JPG " alt="gitclone command" width="1000"/>
 
 La idea es usar este comando para crear un contenedor en Ubuntu que crearía un numero aleatorio del 1 al 10000 y verificar revisando el archivo data.txt de la misma imagen, pero en otro contenedor. Con el siguiente comando identificamos que las dos imágenes no tienen los mismos archivos.
 ```
 docker run -it ubuntu ls /
 ```
+<img src="/Img Luis/DB2.JPG " alt="gitclone command" width="1000"/>
+
 Conservar los datos.
  La imagen que se creo trabaja de forma predeterminada con una base de datos llamada SQLite, esta guarda los datos en un archivo, la manera en la que se pueden conservar los datos es creando un Volumen y adjuntándolo con el comando mount 
 Primer se crea un volumen usando el comando 
 ```
 docker volume create todo-db
 ```
+Luego se detiene y elimina el contenedor
 
-<img src="/img1 " alt="gitclone command" width="1000"/>
-Luego se detiene y elimina el contenedor y se vuelve a montar 
-Utilizando el comando 
+<img src="/Img Luis//DB2.5.JPG " alt="gitclone command" width="1000"/>
+
+para volver a montar la imagen Utilizando el comando: 
 ```
 docker run -dp 127.0.0.1:3000:3000 --mount type=volume,src=todo-db,target=/etc/todos getting-started 
 ```
+<img src="/Img Luis//DB3.JPG " alt="gitclone command" width="1000"/>
+
 Y se realizand las pruebas para ver si se estan conservando los datos. 
-
-
-
+<img src="/Img Luis/Update4.JPG " alt="gitclone command" width="1000"/>
+<img src="/Img Luis/Update5.JPG " alt="gitclone command" width="1000"/>
+<img src="/Img Luis/Update6.JPG " alt="gitclone command" width="1000"/>
 
 ## PASO 6 (USE BIND MOUNTS)   
 
@@ -291,9 +296,14 @@ $ docker run -d \
     -e MYSQL_DATABASE=todos \
     mysql:8.0
 ```
+<img src="/Img Luis/Multi.JPG " alt="gitclone command" width="1000"/>
+
 Y luego se verifica si la base de datos quedo en funcionamiento.
+<img src="/Img Luis/Multi2.JPG " alt="gitclone command" width="1000"/>
 
+como cada contenedor tiene su propia direccion ip, la manera de utilizar SQL  en este caso es con nicolaka/netshoot que contiene varias herramientas para solucionar y depurar problemas de res
 
+<img src="/Img Luis/Multi3.JPG " alt="gitclone command" width="1000"/>
 
 
 
