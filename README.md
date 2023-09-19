@@ -314,7 +314,7 @@ como cada contenedor tiene su propia direccion ip, la manera de utilizar SQL  en
 
 1. En el directorio getting-started-app vamos a crear un archivo  llamado **compose.yaml**.
 
-<img src="/Img Marco/compose.png " alt="gitclone command" width=""/>
+<img src="/img Marco/compose.png " alt="gitclone command" width=""/>
 <br>
 
 ### Definir el servicio de la aplicacion
@@ -444,7 +444,7 @@ volumes:
 
 - Ya realizados los pasos anteriores nuestro archivo compose.yaml deberia verse asi:
 
-<img src="/Img Marco/ComposeRel.png " alt="gitclone command" width="400"/>
+<img src="/img Marco/ComposeRel.png " alt="gitclone command" width="400"/>
 <br>
 
 ### Ejecutar la pila de aplicaciones
@@ -453,20 +453,20 @@ volumes:
 
 1. Debemos asegurarnos de no tener en ejecucion copias de los contenedores usamos **docker ps** para enumerar los contenedores y docker **rm -f id** eliminarlos.
 
-<img src="/Img Marco/dockerps.png " alt="gitclone command" width="500"/>
+<img src="/img Marco/dockerps.png " alt="gitclone command" width="500"/>
 <br>
 
 2. Iniciamos la pila de aplicaciones usando el comando **docker compose** up. Agregue  **-d**  para ejecutar todo en segundo plano.
 (recordemos estar dentro de la ruta del proyecto).
 
-<img src="/Img Marco/compseUp.png " alt="gitclone command" width="700"/>
+<img src="/img Marco/compseUp.png " alt="gitclone command" width="700"/>
 <br>
 
 > Notaremos que Docker Compose creó el volumen y también una red. De forma predeterminada, Docker Compose crea automáticamente una red específica para la pila de aplicaciones (razón por la cual no definió una en el archivo Compose).
 
 **podemos ver los volumenes que se crearon desde _Docker desktop_**
 
-<img src="/Img Marco/volumenes.png " alt="gitclone command" width="700"/>
+<img src="/img Marco/volumenes.png " alt="gitclone command" width="700"/>
 <br>
 
 **podemos ver los registros de accion con el comando   _docker compose logs -f_**
