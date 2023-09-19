@@ -78,6 +78,48 @@ El comando va a construir un contenedor y desplegar nuestra app ademas de genera
 
 <br>
 
+## PASO 3 (Modificar la aplicacion)
+
+Debemos ir a el editor de texto y hacer los cambios que se deseen, en este caso, se cambiaron las líneas 56, 99 y 109 del archivo app.js para que quedara en español 
+<img src="/img1 " alt="gitclone command" width="1000"/>
+
+<br>
+Luego se crea la nueva versión de la imagen utilizando el comando:
+```
+$ docker build -t getting-started .
+```
+Y iniciamos el nuevo contenedor con el código actualizado, utilizando nuevamente 
+```
+$ docker run -dp 127.0.0.1:3000:3000 getting-started
+```
+Pero para evitar el siguiente error:
+<img src="/img1 " alt="gitclone command" width="1000"/>
+ es necesario remover el anterior contenedor que está corriendo también en el puerto 3000 y solo un proceso especifico puede ocupar un puerto.
+Para remover el contenedor que se encuentra corriendo se debe:
+1)	Obtener el Id de este con el comando:
+```
+$ docker ps
+
+```
+
+2)	Detener el contenedor con el comando:
+```
+$ docker stop <the-container-id>
+
+```
+3)	Remover el contenedor con el commando: 
+
+```
+$ docker rm <the-container-id>
+
+```
+
+Ahora es possible iniciar el contendor modificado sin problema.
+<img src="/img1 " alt="gitclone command" width="1000"/>
+Resultado: 
+<img src="/img1 " alt="gitclone command" width="1000"/>
+
+
 ## PASO 4 (SHARE THE APPLICATION)
 
 Ahora que hemos creado una imagen, podemos compartirla. Para compartir imágenes de Docker, debemos utilizar un registro de Docker. El registro predeterminado es **DockerHub** y es de donde provienen todas las imágenes que se han  utilizado.
@@ -120,6 +162,36 @@ docker push marcomn7/getting-started
 el comando se encargara de empujar la imagen al nuevo repositorio de **DockerHub**, podemos revisar la correcta ejecucion dentro del mismo **DockerHub**
 
 <img src="/img Marco/dockerhub.png" alt="gitclone command" width="600"/>
+
+## PASO 5 (Persistir la base de datos)
+Cada contenedor cuenta con su propio espacio temporal por lo que aunque se utilice la misma imagen los cambios no se guardaran.
+La manera en la que se suguiere que se vea esto es con el siguiente comando: 
+```
+$ docker run -d ubuntu bash -c "shuf -i 1-10000 -n 1 -o /data.txt && tail -f /dev/null"
+
+```
+
+La idea es usar este comando para crear un contenedor en Ubuntu que crearía un numero aleatorio del 1 al 10000 y verificar revisando el archivo data.txt de la misma imagen, pero en otro contenedor. Con el siguiente comando identificamos que las dos imágenes no tienen los mismos archivos.
+```
+docker run -it ubuntu ls /
+```
+Conservar los datos.
+ La imagen que se creo trabaja de forma predeterminada con una base de datos llamada SQLite, esta guarda los datos en un archivo, la manera en la que se pueden conservar los datos es creando un Volumen y adjuntándolo con el comando mount 
+Primer se crea un volumen usando el comando 
+```
+docker volume create todo-db
+```
+
+<img src="/img1 " alt="gitclone command" width="1000"/>
+Luego se detiene y elimina el contenedor y se vuelve a montar 
+Utilizando el comando 
+```
+docker run -dp 127.0.0.1:3000:3000 --mount type=volume,src=todo-db,target=/etc/todos getting-started 
+```
+Y se realizand las pruebas para ver si se estan conservando los datos. 
+
+
+
 
 ## PASO 6 (USE BIND MOUNTS)   
 
@@ -199,6 +271,32 @@ nodemon src/index.js
 Using sqlite database at /etc/todos/todo.db
 Listening on port 3000
 ```
+
+## PASO 7 (Aplicación multi contenedor)
+Se va a empezar a utilizar las aplicaciones multicontenedor, esto puede ser por varios motivos: 
+-	Mejor escalabilidad 
+-	Permite versionar y actualizar de forma aislada 
+-	Separación de la aplicación y el motor de base de datos.
+En este caso se utilizara MySQL.
+Primero se crea la red:
+```
+docker network create todo-app
+```
+Despues se inicia el contenedor MySQL, se conecta a la red y se definen variables de entorno:
+```
+$ docker run -d \
+    --network todo-app --network-alias mysql \
+    -v todo-mysql-data:/var/lib/mysql \
+    -e MYSQL_ROOT_PASSWORD=secret \
+    -e MYSQL_DATABASE=todos \
+    mysql:8.0
+```
+Y luego se verifica si la base de datos quedo en funcionamiento.
+
+
+
+
+
 
 ## PASO 8 (USE DOCKER COMPOSE)
 
