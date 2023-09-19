@@ -56,7 +56,7 @@ tener en cuenta el punto al final.
 
 Luego de correr el comando anterior se contruira la imagen de docker en base al archivo Dockerfile que creamos antes.
 
-<img src="/img Marco/ConsImagen.png" alt="gitclone command" width="500"/>
+<img src="/img Marco/ConsImagen.png" alt="gitclone command" width="700"/>
 
 <br>
 
@@ -156,12 +156,12 @@ docker tag getting-started marcomn7/getting-started
 ```
 docker push marcomn7/getting-started
 ```
-<img src="/img Marco/push.png" alt="gitclone command" width="500"/>
+<img src="/img Marco/push.png" alt="gitclone command" width="700"/>
 <br>
 
 el comando se encargara de empujar la imagen al nuevo repositorio de **DockerHub**, podemos revisar la correcta ejecucion dentro del mismo **DockerHub**
 
-<img src="/img Marco/dockerhub.png" alt="gitclone command" width="600"/>
+<img src="/img Marco/dockerhub.png" alt="gitclone command" width="800"/>
 
 ## PASO 5 (Persistir la base de datos)
 Cada contenedor cuenta con su propio espacio temporal por lo que aunque se utilice la misma imagen los cambios no se guardaran.
