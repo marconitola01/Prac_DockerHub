@@ -81,7 +81,7 @@ El comando va a construir un contenedor y desplegar nuestra app ademas de genera
 ## PASO 3 (Modificar la aplicacion)
 
 Debemos ir a el editor de texto y hacer los cambios que se deseen, en este caso, se cambiaron las líneas 56, 99 y 109 del archivo app.js para que quedara en español 
-<img src="/img1 " alt="gitclone command" width="1000"/>
+<img src="Update.JPG " alt="gitclone command" width="1000"/>
 
 <br>
 Luego se crea la nueva versión de la imagen utilizando el comando:
