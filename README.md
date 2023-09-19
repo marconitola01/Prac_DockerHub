@@ -80,11 +80,13 @@ El comando va a construir un contenedor y desplegar nuestra app ademas de genera
 
 ## PASO 3 (Modificar la aplicacion)
 
-Debemos ir a el editor de texto y hacer los cambios que se deseen, en este caso, se cambiaron las líneas 56, 99 y 109 del archivo app.js para que quedara en español 
-<img src="Update.JPG " alt="gitclone command" width="1000"/>
+Debemos ir a el editor de texto y hacer los cambios que se deseen, en este caso, se cambiaron las líneas 56, 99 y 109 del archivo app.js para que quedara en español.
+
+<img src="/Update.JPG " alt="gitclone command" width="1000"/>
 
 <br>
 Luego se crea la nueva versión de la imagen utilizando el comando:
+
 ```
 $ docker build -t getting-started .
 ```
@@ -93,31 +95,29 @@ Y iniciamos el nuevo contenedor con el código actualizado, utilizando nuevament
 $ docker run -dp 127.0.0.1:3000:3000 getting-started
 ```
 Pero para evitar el siguiente error:
-<img src="/img1 " alt="gitclone command" width="1000"/>
+<img src="/Update2.JPG " alt="gitclone command" width="1000"/>
  es necesario remover el anterior contenedor que está corriendo también en el puerto 3000 y solo un proceso especifico puede ocupar un puerto.
 Para remover el contenedor que se encuentra corriendo se debe:
 1)	Obtener el Id de este con el comando:
+   
 ```
 $ docker ps
-
 ```
 
 2)	Detener el contenedor con el comando:
 ```
 $ docker stop <the-container-id>
-
 ```
 3)	Remover el contenedor con el commando: 
 
 ```
 $ docker rm <the-container-id>
-
 ```
 
 Ahora es possible iniciar el contendor modificado sin problema.
-<img src="/img1 " alt="gitclone command" width="1000"/>
+<img src="/Update3.JPG " alt="gitclone command" width="1000"/>
 Resultado: 
-<img src="/img1 " alt="gitclone command" width="1000"/>
+<img src="/Update4.JPG " alt="gitclone command" width="1000"/>
 
 
 ## PASO 4 (SHARE THE APPLICATION)
