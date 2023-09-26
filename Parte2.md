@@ -235,26 +235,6 @@ docker run --rm -d `
 
 <img src="/img Marco/dockerRun2.png" alt="gitclone command" width="800"/>
 
-
-## Desarrollando con docker
-
-Docker es un forma eficiente de manejar apliaciones (alojarlas y desplegarlas) con contenedores podemos organizar nuestro codigo tanto de pruebas como de desarrollo, a continuacion vamos a listar buenas practicas de desarrollo con docker.
-
-<img src="/img Marco/docker.webp" alt="gitclone command" width="800"/>
-
-Ahora podemos probar la conexion a la base datos y enumerar los widgets
-
-```
-curl http://localhost:8000/initdb
-curl http://localhost:8000/widgets
-```
-Debería recibir el siguiente JSON de su servicio:
-
-<img src="/img Marco/initdb.png" alt="gitclone command" width="1000"/>
-
-
-<img src="/img Marco/widgets.png" alt="gitclone command" width="1000"/>
-
 ### utilizar compose para desarrollar localmente.
 
 >Cuando ejecutamos docker init, además de un Dockerfile, también se crea un archivo compose.yaml.
@@ -297,7 +277,66 @@ curl http://localhost:5000/initdb
 curl http://localhost:5000/widgets
 ```
 
-###Configurar CI/CD para la aplicacion.
+### Configurar CI/CD para la aplicacion.
+
+Ahora vamos a realizar el proceso de configuración y uso de Docker GitHub Actions para crear imágenes de Docker y enviar imágenes a Docker Hub.
+
+
+1. **Crea un nuevo repositorio en GitHub.**
+
+creamos un repositorio en Github
+
+<img src="/img Marco/git.png" alt="gitclone command" width="1000"/>
+
+El repositorio contiene un archivo DockerFile simple
+
+<img src="/img Marco/DockerFilegit.png" alt="gitclone command" width="1000"/>
+
+Ahora debemos crear un secreto con nombre DOCKERHUB_USERNAME y nuestro ID de Docker
+
+Tambien debemos generar un token de acceso a DockerHub y agregarlo como segundo secreto en nuestro repositorio de Github.
+
+<img src="/img Marco/tokenDockerHub.png" alt="gitclone command" width="1000"/>
+
+
+<img src="/img Marco/Secrets.png" alt="gitclone command" width="1000"/>
+
+
+
+
+1. **Configurar flujo de trabajo.**
+
+Dentro de nuestro repositorio debemos configurar una accion con la opcion **configurar flujo de trabajo**
+
+Esto nos llevará a una página para crear un nuevo archivo de flujo de trabajo de acciones de GitHub en su repositorio, en forma .github/workflows/main.ymlpredeterminada.
+
+
+
+3. **Ejecute el flujo de trabajo.**
+
+
+
+
+
+
+## Desarrollando con docker
+
+Docker es un forma eficiente de manejar apliaciones (alojarlas y desplegarlas) con contenedores podemos organizar nuestro codigo tanto de pruebas como de desarrollo, a continuacion vamos a listar buenas practicas de desarrollo con docker.
+
+<img src="/img Marco/docker.webp" alt="gitclone command" width="800"/>
+
+Ahora podemos probar la conexion a la base datos y enumerar los widgets
+
+```
+curl http://localhost:8000/initdb
+curl http://localhost:8000/widgets
+```
+Debería recibir el siguiente JSON de su servicio:
+
+<img src="/img Marco/initdb.png" alt="gitclone command" width="1000"/>
+
+
+<img src="/img Marco/widgets.png" alt="gitclone command" width="1000"/>
 
 
 
