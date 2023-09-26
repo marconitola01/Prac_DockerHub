@@ -189,6 +189,51 @@ docker run --rm -d `
   postgres
 ```
 
+<img src="/img Marco/installpostgres.png" alt="gitclone command" width="800"/>
+
+Ahora, aseguremonos de que las base de datos PostgreSQL se esté ejecutando y de que podemos conectarnos a ella.
+
+```
+docker exec -it db psql -U postgres
+```
+<img src="/img Marco/postgresdev.png" alt="gitclone command" width="800"/>
+
+>NOTA: El comando anterior inicio sesion en la base de datos de PostgreSQL
+
+### Ejecutar aplicacion de prueba
+
+Vamos a clonar desde el repositorio en github la nueva app que usaremos.
+
+```
+git clone https://github.com/docker/python-docker-dev
+```
+ejecutemos dokcer init dentro de la direccion del proyecto.
+```
+docker init
+```
+<img src="/img Marco/dockeriniti2.png" alt="gitclone command" width="800"/>
+
+ejecutemos docer build para contruir la imagen
+
+```
+docker build -t python-docker-dev .
+```
+>NOTA: si tenemos mas contenedores en ejecucion o si esta ocupado el puerto 8000 eliminemoslos.
+
+<img src="/img Marco/dockerbuild2.png" alt="gitclone command" width="800"/>
+
+Vamos a ejecutar docker run con las siguientes opciones para ejeuctar la imagen como un contenedor en la misma red en la que esta la base de datos
+
+```
+docker run --rm -d `
+  --network postgresnet `
+  --name rest-server `
+  -p 8000:5000 `
+  -e POSTGRES_PASSWORD=mysecretpassword `
+  python-docker-dev
+```
+
+<img src="/img Marco/dockerRun2.png" alt="gitclone command" width="800"/>
 
 
 ## Desarrollando con docker
@@ -196,6 +241,65 @@ docker run --rm -d `
 Docker es un forma eficiente de manejar apliaciones (alojarlas y desplegarlas) con contenedores podemos organizar nuestro codigo tanto de pruebas como de desarrollo, a continuacion vamos a listar buenas practicas de desarrollo con docker.
 
 <img src="/img Marco/docker.webp" alt="gitclone command" width="800"/>
+
+Ahora podemos probar la conexion a la base datos y enumerar los widgets
+
+```
+curl http://localhost:8000/initdb
+curl http://localhost:8000/widgets
+```
+Debería recibir el siguiente JSON de su servicio:
+
+<img src="/img Marco/initdb.png" alt="gitclone command" width="1000"/>
+
+
+<img src="/img Marco/widgets.png" alt="gitclone command" width="1000"/>
+
+### utilizar compose para desarrollar localmente.
+
+>Cuando ejecutamos docker init, además de un Dockerfile, también se crea un archivo compose.yaml.
+
+>Este archivo de redacción es muy conveniente ya que no es necesario escribir todos los parámetros para pasar al docker comando run. Puede hacerlo de forma declarativa utilizando un archivo Compose.
+
+Ahora vamos a ir nuestra carpeta donde tenemos el proyecto que clonamos de github y actualizamos el archivo compose.yaml
+
+<img src="/img Marco/composeDB.png" alt="gitclone command" width="1000"/>
+
+Podemos analizar el nuevo archivo compose que hemos actualizado y darnos cuenta que este compose especifica un password.txt archivo en elcual se contiene la contraseña de la bd. Debemos crear este archivo  ya que no esta incluido en el repositorio original que clonamos.
+
+> En el directorio del repositorio clonado, cree un nuevo directorio llamado db y dentro de ese directorio cree un archivo llamado password.txtque contenga la contraseña de la base de datos.
+
+<img src="/img Marco/carpetasdb.png" alt="gitclone command" width="200"/>
+
+Dentro del archio **password.txt** vamos a agregar la contraseña en este caso:
+
+```
+mysecretpassword
+```
+
+Detengamos los contenedores que tengamos en ejecucion
+
+Dentro de la carpeta del proyecto corremos el siguiente comando: 
+
+```
+docker compose up --build
+```
+<img src="/img Marco/composeresd.png" alt="gitclone command" width="1000"/>
+
+<img src="/img Marco/composeresd2.png" alt="gitclone command" width="1000"/>
+
+las dos imagenes anteriores son la salida del comando que corrimos anteriormente, podemos ver como desplegamos un nuevo contenedor que inicio un servidor web y una base de datos.
+
+POdemos probar la conexion a base de datos con los comando siguientes como lo hicimos anteriormente.
+
+```
+curl http://localhost:5000/initdb
+curl http://localhost:5000/widgets
+```
+
+###Configurar CI/CD para la aplicacion.
+
+
 
 ## Mejores practicas de desarrollo con docker
 
@@ -209,6 +313,8 @@ Las imagenes mas pequeñas son mas rapidas a la hora de cargarse en memoria al i
 >Por ejemplo: si hemos destacado la necesidad de contar con **JDK** para un proyecto desplegado en Docker podemos descargar desde docker hub una imagen que contenga este recurso (OPEN JDK) en especifico, en lugar de crear una imagen por nuestra cuenta desde cero.
 
 <img src="/img Marco/openjdk.png" alt="gitclone command" width="1000"/>
+
+
 
 <br>
 
