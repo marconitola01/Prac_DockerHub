@@ -17,10 +17,14 @@ Iniciar la aplicacion.
 <img src="/Img Luis/Imagen4.JPG" alt="gitclone command" width="1000"/>
 
 ## Crear un DockerFile para python
- para hacer esto nos situamos en la la carpeta del proyecto clonado de github y utilizamos el
-comando docker init
-imagen 5 
-imagen 6
+Para hacer esto nos situamos en la la carpeta del proyecto clonado de github y utilizamos el
+comando docker init, Este comando crea 3 archivos en la carpeta:
+- Dockerfile: se usa para construir la imagen 
+- .Dockerignore: se usa para especificar patrones y caminos que no quieran ser copiados en la imagen para mantenerla tan compacta como sea posible
+- Compose.yaml: se usa para configurar los servicios de la aplicación
+
+<img src="/Img Luis/Imagen5.JPG" alt="gitclone command" width="1000"/>
+
 
 ## Desarrollando con docker
 
