@@ -1,6 +1,7 @@
 # Segunda parte PracDocker
+
 ## Construye tu imagen python:
-Construir imagenes 
+
 las imagenes que se crean tienen todo lo que necesita una aplicacion para correr, como codigo, dependencias y mucho otros archivos de sistema.
 Se Clona el repositorio para empezar a trabajar
 
@@ -16,7 +17,7 @@ Iniciar la aplicacion.
 
 <img src="/Img Luis/Imagen4.JPG" alt="gitclone command" width="1000"/>
 
-## Crear un DockerFile para python
+### Crear un DockerFile para python
 Para hacer esto nos situamos en la la carpeta del proyecto clonado de github y utilizamos el
 comando docker init, Este comando crea 3 archivos en la carpeta:
 - Dockerfile: se usa para construir la imagen 
@@ -24,6 +25,170 @@ comando docker init, Este comando crea 3 archivos en la carpeta:
 - Compose.yaml: se usa para configurar los servicios de la aplicación
 
 <img src="/Img Luis/Imagen5.JPG" alt="gitclone command" width="1000"/>
+<br>
+
+<img src="/Img Marco/dockeriniti.png" alt="gitclone command" width="1000"/>
+
+### archivo .dockerignore
+
+al ejecutar **docker init** tambien hemos creado un archivo llamado **.dockerignore**, este mismo dockerignore lo usamos para especificar rutas o patrones que no deseamos implementar dentro de nuestra imagen docker asi podemos llevar un mejor manejo de los recursos y el tamaños de nuestra imagen.
+
+
+<img src="/img Marco/dockerIgnore.png" alt="gitclone command" width="800"/>
+
+### construir una imagen
+
+Ahora contamos con un **Dockerfile** y podemos contruir una imagen en base al mismo, el **Dockerfile** se genero cuando ejecutamos el comando **docker init**
+Construir imagen:
+```
+docker build --tag python-docker .
+```
+
+Resultado:
+
+```
+[+] Building 1.3s (12/12) FINISHED
+ => [internal] load .dockerignore
+ => => transferring context: 680B
+ => [internal] load build definition from Dockerfile
+ => => transferring dockerfile: 1.59kB
+ => resolve image config for docker.io/docker/dockerfile:1
+ => CACHED docker-image://docker.io/docker/dockerfile:1@sha256:39b85bbfa7536a5feceb7372a0817649ecb2724562a38360f4
+ => [internal] load metadata for docker.io/library/python:3.11.4-slim
+ => [base 1/5] FROM docker.io/library/python:3.11.4-slim@sha256:36b544be6e796eb5caa0bf1ab75a17d2e20211cad7f66f04f
+ => [internal] load build context
+ => => transferring context: 63B
+ => CACHED [base 2/5] WORKDIR /app
+ => CACHED [base 3/5] RUN adduser     --disabled-password     --gecos ""     --home "/nonexistent"     --shell
+ => CACHED [base 4/5] RUN --mount=type=cache,target=/root/.cache/pip     --mount=type=bind,source=requirements.tx
+ => CACHED [base 5/5] COPY . .
+ => exporting to image
+ => => exporting layers
+ => => writing image sha256:37f9294069a95e5b34bb9e9035c6ea6ad16657818207c9d0dc73594f70144ce4
+ => => naming to docker.io/library/python-docker
+```
+<img src="/img Marco/dockerbuildpy.png" alt="gitclone command" width="800"/>
+
+
+### Ver imagenes locales
+
+Para ver una lista de las imagenes locales podemos usar el comando **docker images** y se listaran las imagenes en uso para nuestro sistema.
+
+<img src="/img Marco/dockerimages.png" alt="gitclone command" width="800"/>
+
+
+### Etiquetar imagenes
+
+El comando **docker tag** crea una nueva etiqueta para una imagen. No crea una nueva imagen. La etiqueta apunta a la misma imagen y es simplemente otra forma de hacer referencia a la imagen.
+
+Agregando etiqueta a una imagen en especial:
+```
+docker tag python-docker:latest python-docker:v1.0.0
+```
+podemos listar las imagenes y ver los cambios
+
+<img src="/img Marco/dockerimages2.png" alt="gitclone command" width="800"/>
+
+>**Los cambios se ven reflejados en las imagenes que especificamos en este caso python-docker**
+
+## Ejecutar la imagen com un contenedor
+ 
+> Un contenedor es un proceso normal del sistema operativo, excepto que este proceso está aislado porque tiene su propio sistema de archivos, su propia red y su propio árbol de procesos aislado, separado del host.
+
+Para ejecutar una imagen dentro de un contenedor usamos el comando **docker run** con el parametro que es el nombre de la imagen.
+
+```
+docker run python-docker
+```
+
+<img src="/img Marco/rundocker2.png" alt="gitclone command" width="800"/>
+
+podemos ver un app que se queda a la espera de solicitudes, esto pasa por que estamos corriendo un app tipo **REST**
+
+<img src="/img Marco/curl.png" alt="gitclone command" width="800"/>
+
+Despues de realizar unas configuraciones podemos realizar solicitudes al localhost:8000 y recibiremos la respuesta anterior del contendor en linea.
+
+<img src="/img Marco/res.png" alt="gitclone command" width="800"/>
+Ahora podemos ver en la terminal que habiamos ejecutado antes como el server nos envia las solicitudes que lleguen.
+
+### Ejecutar en modo independiente
+
+Nuestra aplicacion nos esta mostrando un servidor web, pero no es necesario estar conectado al contenedor, docker puede ejecutar el contenedor en modo independiente o en segundo plano.
+
+Usamos el comando --detach p -d para abreviar
+
+```
+docker run -d -p 8000:5000 python-docker
+```
+> Nota: antes de correr el comando recordemos parar los contenedores que tenemos actualmente en funcionamiento ya que estos ocupan el puerto 8000 y nos dara error
+
+<img src="/img Marco/dockerdetach.png" alt="gitclone command" width="800"/>
+
+Docker inició su contenedor en segundo plano e imprimió la identificación del contenedor en la terminal.
+
+Podemos volver a verificar realizando solictudes con el comando Curl al localhost:8000
+
+
+### Listar contenedores
+
+ahora tenemos a nuestro contenedor ejecutandose en segundo plano, para saber si se esta ejecutando o si tenemos mas contenedores en ejecucion podemos listarlos con el comando **docker ps**
+
+<img src="/img Marco/dockerps2.png" alt="gitclone command" width="800"/>
+
+### Detener, iniciar y renombrar contenedores
+
+Para realizae estas acciones se pueden ejecutar unos comandos sencillos 
+Detener un contenedor
+```
+docker stop <id del contenedor>
+```
+reiniciar un contenedor
+```
+docker restart <id del contenedor>
+```
+Eliminar un contenedor
+```
+docker rm <nombre del contenedor>
+```
+iniciar un contenedor
+```
+docker run <id del contenedor>
+```
+
+## Desarrolla tu aplicacion
+
+### Ejecutar una base de datos en un contenedor
+
+En lugar de descargar PostgreSQL, instalar, configurar y luego ejecutar la base de datos PostgreSQL en su sistema directamente, puede usar la imagen oficial de Docker para PostgreSQL y ejecutarla en un contenedor.
+
+antes de ejecutar postgres en un contenedor debemos crear un volumen de almacenamiento.
+
+```
+docker volume create db-data
+```
+
+Ahora creemos  una red que su aplicación y base de datos utilizarán para comunicarse entre sí.
+
+```
+docker network create postgresnet
+```
+<br>
+<img src="/img Marco/dbnet.png" alt="gitclone command" width="800"/>
+
+Ahora odemos ejecutar PostgreSQL en un contenedor y adjuntarlo al volumen y la red que creó anteriormente. 
+
+```
+docker run --rm -d `
+  --mount type=volume,src=db-data,target=/var/lib/postgresql/data `
+  -p 5432:5432 `
+  --network postgresnet `
+  --name db `
+  -e POSTGRES_PASSWORD=mysecretpassword `
+  -e POSTGRES_DB=example `
+  postgres
+```
+
 
 
 ## Desarrollando con docker
@@ -92,11 +257,11 @@ RUN apt-get -y update && apt-get install -y python
 
 ## Donde y cómo conservar los datos de la aplicacion.
 
-- **Evite almacenar datos de aplicaciones en la capa de escritura de su contenedor utilizando controladores de almacenamiento . Esto aumenta el tamaño de su contenedor y es menos eficiente desde una perspectiva de E/S que usar volúmenes o montajes vinculados.** :chart_with_upwards_trend:
+- Evite almacenar datos de aplicaciones en la capa de escritura de su contenedor utilizando controladores de almacenamiento . Esto aumenta el tamaño de su contenedor y es menos eficiente desde una perspectiva de E/S que usar volúmenes o montajes vinculados. :chart_with_upwards_trend:
   <br>
-- **almacene datos usando volúmenes.Un caso en el que es apropiado utilizar montajes enlazados es durante el desarrollo, cuando es posible que desee montar su directorio fuente o un binario que acaba de crear en su contenedor. Para producción, utilice un volumen y móntelo en la misma ubicación en la que montó un soporte de enlace durante el desarrollo.** :floppy_disk:
+- almacene datos usando volúmenes.Un caso en el que es apropiado utilizar montajes enlazados es durante el desarrollo, cuando es posible que desee montar su directorio fuente o un binario que acaba de crear en su contenedor. Para producción, utilice un volumen y móntelo en la misma ubicación en la que montó un soporte de enlace durante el desarrollo. :floppy_disk:
   <br>
-- **Para producción, utilice secretos para almacenar datos confidenciales de aplicaciones utilizados por los servicios y utilice configuraciones para datos no confidenciales, como archivos de configuración. Si actualmente utiliza contenedores independientes, considere migrar para utilizar servicios de réplica única, de modo que pueda aprovechar estas características de solo servicio.** :lock: 
+- Para producción, utilice secretos para almacenar datos confidenciales de aplicaciones utilizados por los servicios y utilice configuraciones para datos no confidenciales, como archivos de configuración. Si actualmente utiliza contenedores independientes, considere migrar para utilizar servicios de réplica única, de modo que pueda aprovechar estas características de solo servicio.:lock: 
 
 ## Utilizar CI/CD para pruebas e implementacion
 
@@ -197,3 +362,43 @@ RUN apt-get update && apt-get install -y \
 
 Al crear una imagen, Docker sigue las instrucciones de su Dockerfile y ejecuta cada una en el orden especificado. A medida que se examina cada instrucción, Docker busca una imagen existente en su caché, en lugar de crear una imagen nueva duplicada.
 
+## Mejores practicas de seguridad
+
+Para mejorar la seguridad durante nuestro procesos de desarrollo y despliegue podemos seguir una serie de recomendaciones generales
+
+1. **Elegir la imagen base correcta:**
+
+Debemos asegurarnos de elegir una imagen que este creada apartir de una fuente confiable.
+
+> Docker Hub tiene más de 8,3 millones de repositorios. Algunas de estas imágenes son **imágenes oficiales**, docker también ofrece imágenes publicadas por **editores verificados** . Estas imágenes de alta calidad son publicadas y mantenidas por las organizaciones asociadas con Docker, y Docker verifica la autenticidad del contenido en sus repositorios.
+
+<br>
+
+<img src="/img Marco/dockerOFI2.png" alt="gitclone command" width="800"/>
+<br>
+
+2. **Utilizar compilaciones de varias etapas:**
+
+Puede usar varias declaraciones FROM en su Dockerfile y puede usar una imagen base diferente para cada una. También puedes copiar selectivamente artefactos de una etapa a otra, dejando atrás cosas que no necesitas en la imagen final. Esto puede dar como resultado una imagen final concisa. 
+
+> Este método de crear una imagen pequeña no sólo reduce significativamente la complejidad, sino que también reduce la posibilidad de implementar artefactos vulnerables en su imagen.
+
+3. **Reconstruir imagenes**
+
+Se recomienda  reconstruir una imagen de Docker con regularidad para evitar vulnerabilidades conocidas que se hayan solucionado. Al reconstruir, se puede utilizar la opción **--no-cache** para evitar accesos a la caché y garantizar una descarga nueva.
+
+```
+docker build --no-cache -t myImage:myTag myPath/
+```
+
+4. **Verifique su imagen en busca de vulnerabilidades:**
+
+Además de seguir las mejores prácticas descritas en esta página al desarrollar imágenes, también es importante analizar y evaluar continuamente la postura de seguridad de sus imágenes utilizando herramientas de detección de vulnerabilidades.
+
+> - Docker Hub admite una función de escaneo automático de vulnerabilidades que, cuando está habilitada, escanea automáticamente las imágenes cuando las envía a un repositorio de Docker Hub. Requiere una suscripción a Docker.
+
+> - Docker Hub también admite una función de análisis de imágenes avanzado de acceso temprano , que amplía la solución de escaneo de vulnerabilidades "básica" con capacidades mejoradas e información más detallada y procesable.
+
+> - Para la CLI, existe el docker scoutcomplemento CLI que le permite explorar vulnerabilidades de imágenes usando la terminal.
+
+> - Docker Desktop tiene una vista detallada de las imágenes de su almacén de imágenes local, que visualiza todas las vulnerabilidades conocidas que afectan a una imagen.
