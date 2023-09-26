@@ -6,7 +6,7 @@ Se Clona el repositorio para empezar a trabajar
 
 <img src="/Img Luis/Imagen1.JPG" alt="gitclone command" width="1000"/>
 
-(Opcional) probar la aplicacion localmente, crea el ambiente, instala las dependencias
+(Opcional) probar la aplicacion localmente, crea el ambiente, instala las dependencias.
 
 <img src="/Img Luis/Imagen2.JPG" alt="gitclone command" width="1000"/>
 
