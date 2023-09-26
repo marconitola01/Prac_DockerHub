@@ -194,9 +194,9 @@ docker run -dp 127.0.0.1:3000:3000 --mount type=volume,src=todo-db,target=/etc/t
 <img src="/Img Luis//DB3.JPG " alt="gitclone command" width="1000"/>
 
 Y se realizand las pruebas para ver si se estan conservando los datos. 
-<img src="/Img Luis/Update4.JPG " alt="gitclone command" width="1000"/>
-<img src="/Img Luis/Update5.JPG " alt="gitclone command" width="1000"/>
-<img src="/Img Luis/Update6.JPG " alt="gitclone command" width="1000"/>
+<img src="/Img Luis/DB4.JPG " alt="gitclone command" width="1000"/>
+<img src="/Img Luis/DB5.JPG " alt="gitclone command" width="1000"/>
+<img src="/Img Luis/Db6.JPG " alt="gitclone command" width="1000"/>
 
 ## PASO 6 (USE BIND MOUNTS)   
 
@@ -301,11 +301,34 @@ $ docker run -d \
 Y luego se verifica si la base de datos quedo en funcionamiento.
 <img src="/Img Luis/Multi2.JPG " alt="gitclone command" width="1000"/>
 
-como cada contenedor tiene su propia direccion ip, la manera de utilizar SQL  en este caso es con nicolaka/netshoot que contiene varias herramientas para solucionar y depurar problemas de res
+como cada contenedor tiene su propia direccion ip, la manera de utilizar SQL  en este caso es con nicolaka/netshoot que contiene varias herramientas para solucionar y depurar problemas de red
 
 <img src="/Img Luis/multi3.JPG " alt="gitclone command" width="1000"/>
 
+Dentro del contenedor,  se usara el comando DIG , que es una herramienta DNS útil
+<img src="/Img Luis/multi4.JPG " alt="gitclone command" width="1000"/>
 
+En la seccion ANSWER SECTION: se va a ver un registro A que mostrara la direccion ip a la que se debe conectar la base de datos, pero como anteriormente se utilizo el comando --network-alias
+solo es necesario conectarse al host llamado mysql
+
+## Ejecutar la aplicacion con MYSQL
+
+para esto debemos detener la imagen y removerla. para posteriormente volverla a correr pero especificando las variables de entorno para conectar ambos contenedores, El de MYSQL con la imagen que se ha estado
+utilizando:
+
+<img src="/Img Luis/multi5.JPG " alt="gitclone command" width="1000"/>
+
+y con el comando "docker logs -f <container-id>" se vera un mensaje que indica que se esta utilizando la base de datos
+
+<img src="/Img Luis/multi6.JPG " alt="gitclone command" width="1000"/>
+
+Ahora solo queda probar la aplicacion y verificar si los registros estan quedando guardados en la base de datos:
+
+<img src="/Img Luis/multi7.JPG " alt="gitclone command" width="1000"/
+
+<img src="/Img Luis/multi8.JPG " alt="gitclone command" width="1000"/>
+
+<img src="/Img Luis/multi9.JPG " alt="gitclone command" width="1000"/>
 
 
 ## PASO 8 (USE DOCKER COMPOSE)
@@ -479,3 +502,54 @@ app_1    | Listening on port 3000
 ```
 
 > Ahora podemos abrir el localhost de nuestra maquina y ver la app en funcionamiento, pudimos ver como Docker compose nos ayuda a simplificar la forma de definir y compartir aplicaciones _multiservicio_
+
+## PASO 9 Mejores practicas para construir imagenes
+
+se puede utilizar el historial de imagenes de docker para ver cada capa creada dentro de una imagen con el comando 
+```
+docker image history "Nombre"
+```
+<img src="/Img Luis/BestPrac1.JPG " alt="gitclone command" width="1000"/>
+
+y al agregar la linea --not-trunc se puede ver el resultado completo
+```
+docker image history --no-trunc "Nombre"
+```
+
+## Almacenamiento en caché de capas
+
+las capas juegan un papel importante en la reduccion del tiempo de compilacion de las imagenes. Ya que como se tiene el Dockerfile actualmente cada vez que una capa cambia todas deben reestructurarse
+y las dependencias del hilo se tuvienen que reinstalar. para evitar eso se debe cambiar el contenido del Dockerfile.
+
+Pasarlo de esto:
+# syntax=docker/dockerfile:1
+FROM node:18-alpine
+WORKDIR /app
+COPY . .
+RUN yarn install --production
+CMD ["node", "src/index.js"]
+
+a esto: 
+
+<img src="/Img Luis/BestPrac2.JPG " alt="gitclone command" width="1000"/>
+
+y crear un archivo nuevo llamado ".dockerignore" con el siguiente contenido:
+
+<img src="/Img Luis/BestPrac3.JPG " alt="gitclone command" width="1000"/>
+
+de esta manera solo se copian selectivamente los archivos relevantes de imágenes y cuando se realicen actuaizaciones envios y extracciones sera mucho mas rapido.
+HTM
+A continuacion se muestra como cambian los tiempos de compialcion despues de hacer un cambio en un archivo HTML:
+
+<img src="/Img Luis/BestPrac4.JPG " alt="gitclone command" width="1000"/>
+
+<img src="/Img Luis/BestPrac5.JPG " alt="gitclone command" width="1000"/>
+
+<img src="/Img Luis/BestPrac6.JPG " alt="gitclone command" width="1000"/>
+
+
+
+
+
+
+
