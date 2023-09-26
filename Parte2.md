@@ -27,7 +27,7 @@ comando docker init, Este comando crea 3 archivos en la carpeta:
 <img src="/Img Luis/Imagen5.JPG" alt="gitclone command" width="1000"/>
 <br>
 
-<img src="/Img Marco/dockeriniti.png" alt="gitclone command" width="1000"/>
+<img src="/img Marco/dockeriniti.png" alt="gitclone command" width="1000"/>
 
 ### archivo .dockerignore
 
