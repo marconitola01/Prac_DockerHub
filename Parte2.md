@@ -3,15 +3,17 @@
 Construir imagenes 
 las imagenes que se crean tienen todo lo que necesita una aplicacion para correr, como codigo, dependencias y mucho otros archivos de sistema.
 Se Clona el repositorio para empezar a trabajar
-<img src="/img Luis/imagen1.png" alt="gitclone command" width="1000"/>
+
+<img src="/img Luis/imagen1.JPG" alt="gitclone command" width="1000"/>
+
 (Opcional) probar la aplicacion localmente, crea el ambiente, instala las dependencias
-<img src="/img Luis/imagen2.png" alt="gitclone command" width="1000"/>
+<img src="/img Luis/imagen2.JPG" alt="gitclone command" width="1000"/>
 Iniciar la aplicacion.
-<img src="/img Luis/imagen3.png" alt="gitclone command" width="1000"/>
+<img src="/img Luis/imagen3.JPG" alt="gitclone command" width="1000"/>
 
-<img src="/img Luis/imagen4.png" alt="gitclone command" width="1000"/>
+<img src="/img Luis/imagen4.JPG" alt="gitclone command" width="1000"/>
 
-TCrear un DockerFile para python
+## Crear un DockerFile para python
  para hacer esto nos situamos en la la carpeta del proyecto clonado de github y utilizamos el
 comando docker init
 imagen 5 
