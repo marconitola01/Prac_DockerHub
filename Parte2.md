@@ -296,7 +296,7 @@ Ahora debemos crear un secreto con nombre DOCKERHUB_USERNAME y nuestro ID de Doc
 
 Tambien debemos generar un token de acceso a DockerHub y agregarlo como segundo secreto en nuestro repositorio de Github.
 
-<img src="/img Marco/tokenDockerHub.png" alt="gitclone command" width="1000"/>
+<img src="/img Marco/tokenDockerhub.png" alt="gitclone command" width="1000"/>
 
 
 <img src="/img Marco/Secrets.png" alt="gitclone command" width="1000"/>
