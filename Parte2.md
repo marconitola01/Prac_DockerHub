@@ -547,3 +547,79 @@ Además de seguir las mejores prácticas descritas en esta página al desarrolla
 > - Para la CLI, existe el docker scoutcomplemento CLI que le permite explorar vulnerabilidades de imágenes usando la terminal.
 
 > - Docker Desktop tiene una vista detallada de las imágenes de su almacén de imágenes local, que visualiza todas las vulnerabilidades conocidas que afectan a una imagen.
+
+
+## construir con Docker
+
+El proyecto de ejemplo es una aplicación cliente-servidor para traducir mensajes a un idioma ficticio.
+La estructura del proyecto es la siguiente.
+<img src="/img Marco/Nuevaapp.png" alt="gitclone command" width="200"/>
+
+### Capas
+
+El orden de las instrucciones de Dockerfile es importante. Una compilación de Docker consta de una serie de instrucciones de compilación ordenadas. Cada instrucción en un Dockerfile se traduce aproximadamente en una capa de imagen. 
+
+<img src="/img Marco/layers.png" alt="gitclone command" width="1000"/>
+
+### Capas almacenadas en caché
+
+Cuando se ejecuta una compilación, el constructor intenta reutilizar capas de compilaciones anteriores. Si una capa de una imagen no se modifica, el constructor la recoge del caché de compilación. Si una capa ha cambiado desde la última generación, esa capa y todas las capas siguientes deben reconstruirse.
+
+<img src="/img Marco/cache-bust.png" alt="gitclone command" width="1000"/>
+
+### como actualizar el orden de las instrucciones
+
+Puede evitar esta redundancia reordenando las instrucciones en el Dockerfile. Cambie el orden de las instrucciones para que la descarga e instalación de las dependencias se produzcan antes de que el código fuente se copie en el contenedor. De esa manera, el constructor puede reutilizar la capa de "dependencias" del caché, incluso cuando realiza cambios en su código fuente.
+
+## multi etapas
+
+- Le permiten ejecutar pasos de compilación en paralelo, lo que hace que su proceso de compilación sea más rápido y eficiente.
+- Le permiten crear una imagen final con un tamaño más pequeño y que contiene solo lo necesario para ejecutar su programa.
+
+Luego de ejecutar docker run con el DockerFile que tenemos actualmente nos crea el siguiente container.
+  
+```
+docker build --tag=buildme .
+docker images buildme
+REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
+buildme      latest    c021c8a7051f   5 seconds ago   150MB
+```
+
+### Agregar etapas
+
+Al utilizar compilaciones de varias etapas, se puede optar por utilizar diferentes imágenes base para sus entornos de compilación y tiempo de ejecución. Puede copiar artefactos de compilación desde la etapa de compilación a la etapa de ejecución.
+
+Vamos a cambiar el DockerFile
+```
+  # syntax=docker/dockerfile:1
+  FROM golang:1.20-alpine
+  WORKDIR /src
+  COPY go.mod go.sum .
+  RUN go mod download
+  COPY . .
+  RUN go build -o /bin/client ./cmd/client
+  RUN go build -o /bin/server ./cmd/server
++
++ FROM scratch
++ COPY --from=0 /bin/client /bin/server /bin/
+  ENTRYPOINT [ "/bin/server" ]
+```
+
+Ahora, si crea la imagen y la inspecciona, debería ver un número significativamente menor:
+
+```
+docker build --tag=buildme .
+docker images buildme
+REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
+buildme      latest    436032454dd8   7 seconds ago   8.45MB
+```
+
+## Implementacion y orquestacion
+
+### Implementar en Kubernetes
+
+el concepto de contenedores permite permite mover y escalar aplicaciones a nubes y centros de datos.
+
+>Las herramientas para gestionar, escalar y mantener aplicaciones en contenedores se denominan orquestadores. Dos de las herramientas de orquestación más populares son Kubernetes y Docker Swarm. Docker Desktop proporciona entornos de desarrollo para ambos orquestadores.
+
+oe piroba
